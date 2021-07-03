@@ -2,7 +2,6 @@
 
 '''
 This node will operate a rendez vous of the spawned robots.
-The particular point depends only on the initial pose of the robots.
 '''
 
 import numpy as np
