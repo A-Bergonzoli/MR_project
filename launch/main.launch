@@ -1,0 +1,28 @@
+<launch>
+  
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <!-- Start Gazebo with an empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- include the turtles -->
+  <include file="$(find mr_project)/launch/turtles.launch"/>
+
+  <!-- Comment the following nodes IF using rendezvous.py -->
+  <node name="agent_1" pkg="mr_project" type="agent1.py" output="screen" />
+  <node name="agent_2" pkg="mr_project" type="agent2.py" output="screen" />
+  <node name="agent_3" pkg="mr_project" type="agent3.py" output="screen" />
+  <node name="agent_4" pkg="mr_project" type="agent4.py" output="screen" />
+
+</launch>

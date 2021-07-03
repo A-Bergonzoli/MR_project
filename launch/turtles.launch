@@ -1,0 +1,51 @@
+<launch>
+
+  <!-- BEGIN ROBOT 1-->
+  <group ns="/turtle1">
+    <param name="tf_prefix" value="turtle1_tf" />
+    <include file="$(find mr_project)/launch/turtle.launch" >
+      <!-- pose to use for rendez-vous.py -->
+      <!-- <arg name="init_pose" value="-x -10 -y 12 -z 0 -Y 0.7853" /> -->
+      <!-- pose to use otherwise -->      
+      <arg name="init_pose" value="-x 3 -y -2 -z 0 -Y -3.1415" />
+      <arg name="robot_name"  value="Turtle1" />
+    </include>
+  </group>
+
+  <!-- BEGIN ROBOT 2-->
+  <group ns="/turtle2">
+    <param name="tf_prefix" value="turtle2_tf" />
+    <include file="$(find mr_project)/launch/turtle.launch" >
+    <!-- pose to use for rendez-vous.py -->
+      <!-- <arg name="init_pose" value="-x 12 -y -12 -z 0 -Y -1.5707" /> -->
+      <!-- pose to use otherwise -->
+      <arg name="init_pose" value="-x 4.8 -y -3.5 -z 0 -Y 2.3561" />
+      <arg name="robot_name"  value="Turtle2" />
+    </include>
+  </group>
+
+  <!-- BEGIN ROBOT 3-->
+  <group ns="/turtle3">
+    <param name="tf_prefix" value="turtle3_tf" />
+    <include file="$(find mr_project)/launch/turtle.launch" >
+    <!-- pose to use for rendez-vous.py -->
+      <!-- <arg name="init_pose" value="-x 10 -y 8 -z 0 -Y 2.0943" /> -->
+      <!-- pose to use otherwise -->
+      <arg name="init_pose" value="-x 6 -y -1.2 -z 0 -Y -1.5707" />
+      <arg name="robot_name"  value="Turtle3" />
+    </include>
+  </group>
+
+  <!-- BEGIN ROBOT 4-->
+  <group ns="/turtle4">
+    <param name="tf_prefix" value="turtle4_tf" />
+    <include file="$(find mr_project)/launch/turtle.launch" >
+    <!-- pose to use for rendez-vous.py -->
+      <!-- <arg name="init_pose" value="-x -1 -y -15 -z 0 -Y 3.1415" /> -->
+      <!-- pose to use otherwise -->
+      <arg name="init_pose" value="-x 7.8 -y -1.3 -z 0 -Y 2.3561" />
+      <arg name="robot_name"  value="Turtle4" />
+    </include>
+  </group>
+
+</launch>

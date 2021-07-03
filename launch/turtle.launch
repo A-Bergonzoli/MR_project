@@ -1,0 +1,30 @@
+<launch>
+    <!-- Arguments for this launch file -->
+    <arg name="robot_name"/>
+    <arg name="init_pose"/>
+
+  <!-- Load controllers configurations from YAML files to the parameter server -->
+  <rosparam command="load"
+            file="$(find mr_project)/config/turtle.yaml"
+            ns="/$(arg robot_name)" />
+  <!-- Load the URDF model into the parameter server -->
+  <param name="/$(arg robot_name)/robot_description" command=" $(find xacro)/xacro $(find mr_project)/urdf/my_robot_x.urdf.xacro" />
+
+  <!-- Spawn a Turtle in Gazebo, taking the description from the parameter server -->
+  <node name="urdf_spawner_$(arg robot_name)" pkg="gazebo_ros" type="spawn_model" ns="/$(arg robot_name)"
+        args="$(arg init_pose) -unpause -urdf -model $(arg robot_name) -param /$(arg robot_name)/robot_description" respawn="false" output="screen">
+  </node>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="/$(arg robot_name)">
+    <param name="publish_frequency" type="double" value="30.0" />
+  </node>
+
+  <!-- Spawn controller -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" 
+      args="--namespace=/$(arg robot_name)
+      joint_state_controller
+      DD_controller
+      --shutdown-timeout 3">
+  </node>
+
+</launch>

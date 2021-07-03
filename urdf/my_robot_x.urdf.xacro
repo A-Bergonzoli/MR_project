@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<robot name="turtle"  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Include cylinder wheel macro -->
+  <xacro:include filename="$(find mr_project)/urdf/cylinder_wheel.urdf.xacro" />
+  <!-- Include Hokuyo Laser scanner macro -->
+  <xacro:include filename="$(find mr_project)/urdf/visual_sensor.xacro" />
+  <!-- Include dd_controller macro -->
+  <xacro:include filename="$(find mr_project)/urdf/dd_controller_gazebo.xacro" />
+
+  <!--PROPERTY LIST-->
+  <xacro:property name="M_PI" value="3.14159265359" />
+  <xacro:property name="M_PI_2" value="1.57079632679" />
+  <xacro:property name="DEG_TO_RAD" value="0.017453293" />
+  <!--Main body cylinder base-->
+  <xacro:property name="base_mass" value="5" />
+  <xacro:property name="base_height" value="0.02" />
+  <xacro:property name="base_radius" value="0.15" />
+  <!--castor wheel -->
+  <xacro:property name="castor_mass" value="0.5" />
+  <xacro:property name="castor_height" value="0.04" />
+  <xacro:property name="castor_radius" value="0.025" />
+
+
+  <!--MACRO List-->
+  <!-- Caster wheel macro for 'inertial' tag -->
+  <xacro:macro name="castor_inertia" params="mass">
+      <inertial>
+          <mass value="${mass}" />
+          <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+              iyy="0.001" iyz="0.0"
+              izz="0.001" />
+      </inertial>
+  </xacro:macro>
+
+
+  <!-- LINK list -->
+  <link name = "map">
+  </link>
+  <joint name="map_joint" type="fixed">
+      <parent link="map"/>
+      <child link="base_link"/>
+  </joint>
+
+  <!-- Body/chassis of the robot -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="${base_height}" radius="${base_radius}"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${base_height}" radius="${base_radius}"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertia m="${base_mass}" r="${base_radius}" h="${base_height}" /> 
+  </link> 
+
+
+  <!--Cylinder wheels (using the macros in cyl_wheel_urdf.xacro)-->
+  <xacro:cylinder_wheel fb="front" lr="right" parent="base_link" translateX="0" translateY="0.5" flipY="1" />
+  <xacro:cylinder_wheel fb="front" lr="left" parent="base_link" translateX="0" translateY="-0.5" flipY="1" />
+
+
+  <!--Castor wheel-->
+  <link name="castor_front_wheel">
+    <visual>
+      <geometry>
+        <sphere radius="${castor_radius}"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0.02 0"/>
+    </visual>
+    <collision>
+      <origin rpy="1.57075 0 0" xyz="0 0.02 0"/>
+      <geometry>
+        <sphere radius="${castor_radius}"/>
+      </geometry>
+    </collision>
+    <xacro:castor_inertia mass="${castor_mass}" />
+  </link>
+  <link name="castor_back_wheel">
+    <visual>
+      <geometry>
+        <sphere radius="${castor_radius}"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0.02 0.02 0"/>
+    </visual>
+    <collision>
+      <origin rpy="1.57075 0 0" xyz="0 0.02 0"/>
+      <geometry>
+        <sphere radius="${castor_radius}"/>
+      </geometry>
+    </collision>
+    <xacro:castor_inertia mass="${castor_mass}" />
+  </link>
+
+  <joint name="front_c_wheel_jnt" type="fixed">
+    <parent link="base_link"/>
+    <child link="castor_front_wheel"/>
+    <origin rpy="-1.57 0 0" xyz="0.115 0.0 0.007"/>
+  </joint>
+  <joint name="back_c_wheel_jnt" type="fixed">
+    <parent link="base_link"/>
+    <child link="castor_back_wheel"/>
+    <origin rpy="-1.57 0 0" xyz="-0.135 0.0 0.009"/>
+  </joint>
+
+
+  <!-- SENSORS -->
+  <!-- hokuyo -->
+  <xacro:hokuyo base_radius="${base_radius}" base_height="${base_height}"/>
+
+  
+  <!-- Gazebo plugin for ROS Control -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    </plugin>
+  </gazebo>
+
+  <!-- Gazebo plugin for publish real pose of robot -->
+  <gazebo>
+      <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>base_link</bodyName>
+      <topicName>ground_truth/state</topicName>
+      <gaussianNoise>0.01</gaussianNoise>
+      <frameName>map</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+      </plugin>
+  </gazebo>
+
+
+</robot>
