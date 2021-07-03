@@ -153,7 +153,7 @@ class Agent_1():
 
 
 if __name__ == "__main__":
-    # Instance an object of the 'rendezvous' class
+    # Instance an object of the 'Agent_1' class
     ob = Agent_1()
 
     # rate for the loop cycle (Hz)
