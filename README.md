@@ -10,7 +10,7 @@
     
   version 2 (after accordingly modifying turtles.launch and main.launch as specified in the respective files): 
   
-    `roslqunch mr_project main.py` 
+    `roslaunch mr_project main.py` 
 
 -) Implement formation travelling w/ obstacle avoidance
 
