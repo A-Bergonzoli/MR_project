@@ -17,7 +17,6 @@ k_2 = 0.5
 
 '''
 This function computes the artificial potential field (APF) for a given obstacle.
-This function is used by the leader (only one that knows the position of the obstacles)
 '''
 def get_apf(x, y, x_obs, y_obs, r, R):
     inside_apf = False
@@ -39,7 +38,6 @@ def get_apf(x, y, x_obs, y_obs, r, R):
     return np.array([V_a, inside_apf])
 '''
 This function computes the modified tracking error (as a symbolic expression) to accomodate obstacle avoidance.
-As above, this function is used only by the leader.
 '''
 def get_modified_position_error(x, y, x_d, y_d, V_a):
     x_a, y_a = sp.symbols("x_a, y_a")
@@ -55,7 +53,6 @@ def get_modified_position_error(x, y, x_d, y_d, V_a):
     return np.array([E_x, E_y])
 '''
 This function computes the linear control input for the obstacle avoidance phase.
-As above, this function is used only by the leader.
 '''
 def obstacle_control_law(E_x, E_y, th, xdot_d, ydot_d):
     kp = 0.3
