@@ -12,7 +12,7 @@
   
     `roslaunch mr_project main.launch` 
 
--) Implement formation travelling w/ obstacle avoidance
++) Implement formation travelling w/ obstacle avoidance
 
   run the simulation world:
   
