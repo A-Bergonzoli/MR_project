@@ -24,4 +24,12 @@
     
     `rosrun mr_project group_action_client.py`
 
--) Implement leader-follower dynamic: the leader is responsible for the path planning while the others follow 
++) Implement leader-follower dynamic: the leader is responsible for the path planning while the others follow 
+  
+  Open three terminal and run in each one respectively the following commands:
+    
+    `roslaunch mr_project multi_spawn.launch`
+  
+    `roslaunch mr_project multi_navigation.launch`
+  
+    `rosrun mr_project follower.py`
