@@ -1,0 +1,40 @@
+<launch>
+
+    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+
+    <arg name="leader_pose" default="-x -2 -y 1 -z 0.0 -Y 0.0" />
+
+    <!-- Start world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_stage_4.world"/>
+      <arg name="paused" value="false"/>
+      <arg name="use_sim_time" value="true"/>
+      <arg name="gui" value="true"/>
+      <arg name="headless" value="false"/>
+      <arg name="debug" value="false"/>
+    </include>
+
+    <!-- LEADER robot -->
+    <group ns="/leader">
+
+        <param name="/leader/robot_description" command="$(find xacro)/xacro $(find mr_project)/urdf/waffle.urdf.xacro" />
+
+        <node name="urdf_spawner_leader" pkg="gazebo_ros" type="spawn_model" ns="/leader"
+            args="$(arg leader_pose) -unpause -urdf -model leader -param /leader/robot_description" respawn="false" output="screen">
+        </node>
+
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" ns="/leader" >
+            <param name="publish_frequency" type="double" value="30.0" />
+        </node>
+    </group>
+
+    <!-- FOLLOWER robot -->
+    <group ns="/follower">
+        <param name="tf_prefix" value="follower_tf" />
+        <include file="$(find mr_project)/launch/turtle.launch" >
+            <arg name="init_pose" value="-x -2 -y 1.5 -z 0.0 -Y 0.0" />
+            <arg name="robot_name"  value="Follower" />
+        </include>
+    </group>
+
+</launch>
