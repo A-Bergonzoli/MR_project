@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 
 '''
-This node will operate a rendez vous of the spawned robots.
+This node will operate a rendez-vous of the spawned robots.
 '''
-
-import numpy as np
-from ctrl_law import *
-from tf.transformations import euler_from_quaternion
-from scipy.spatial import distance
 
 import rospy
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
+
+import numpy as np
+
+from ctrl_law import *
+from tf.transformations import euler_from_quaternion
+from scipy.spatial import distance
+from posture_regulation import get_gamma
+
+
+
 
 class Agent_1():
 
@@ -74,7 +79,7 @@ class Agent_1():
                 quaternion_pose.z,
                 quaternion_pose.w]
         roll, pitch, yaw = euler_from_quaternion(tmp)
-        theta = yaw
+        theta = yaw%(2*math.pi)
         return theta
 
     # Get poses from callbacks
@@ -137,14 +142,16 @@ class Agent_1():
             pose4 = self.get_pose4()
             # Neighbours set 
             N_1 = self.define_neighbours(pose2, pose3, pose4)
+            # Compute gamma (the angular error)
+            gamma1 = get_gamma(self.q1[0], self.q1[1], self.q1[2])
             # Compute inputs:
             if (len(N_1) != 0):
-                (v1, w1) = rv_control_law_ar2(pose1, N_1)
+                (v1, w1) = rendezvous_control_law(pose1, N_1, gamma1)
             else:
                 v1 = 0.0
                 w1 = 0.0
             # Publish velocities on cmd_vel_i topics
-            self.twist_msg1.linear.x = -v1
+            self.twist_msg1.linear.x = -v1 + 0.2
             self.twist_msg1.angular.z = -w1
             self.cmd_vel1_pub.publish(self.twist_msg1)
 
