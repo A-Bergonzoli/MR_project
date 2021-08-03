@@ -55,14 +55,12 @@ def rv_control_law_ar1(q, N_i):
 
 # Rendez-vous control law: all agents are attracted to the same point, which is the origin (0,0) 
 # w/ repulsion. [NOTE: This function is the one used by agents.py ]
-def rv_control_law_ar2(q, N_i):
+def rendezvous_control_law(q, N_i, ang_err):
 
-    c = 1.2 # clearence
+    c = 1.2 #clearence
     v = np.zeros(len(N_i))
     w = np.zeros(len(N_i))
     i = 0
-
-    (u1, u2) = posture_regulation.posture_regulation_control_law(q[0], q[1], q[2])
 
     for neighbour in N_i:
         # Compute kd
@@ -71,9 +69,9 @@ def rv_control_law_ar2(q, N_i):
         # Compute phi
         phi = math.atan2( neighbour[1]-q[1], neighbour[0]-q[0] )
         # Compute inputs
-        v[i] = ( (q[0] - neighbour[0])*np.cos(q[2]) + (q[1] - neighbour[1])*np.sin(q[2]) ) * kd  - u1
-        w[i] = ( q[2] - kd*phi ) + (kd - 1)*math.pi/2
+        v[i] = ( (q[0] - neighbour[0])*np.cos(q[2]) + (q[1] - neighbour[1])*np.sin(q[2]) ) * kd
+        w[i] = ( q[2] - kd*phi )
         # Update
         i += 1
 
-    return np.array([0.1*sum(v), 0.1*sum(w)])
+    return np.array([0.1*sum(v), 0.1*sum(w)*1.5*ang_err])
