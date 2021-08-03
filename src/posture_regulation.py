@@ -11,8 +11,6 @@ import math
 def cartesian_regulation_control_law(x, y, theta):
 
     #gains
-    # k1 = 0.3  # goes backwards most of the time
-    # k2 = 0.1
     k1 = 0.02
     k2 = 0.6
     
@@ -42,3 +40,7 @@ def posture_regulation_control_law(x, y, theta):
     w = k2*gamma + k1*( (np.sin(gamma)*np.cos(gamma))/(gamma) )*(gamma + k3*delta)
 
     return np.array([v, w])
+
+# Get gamma
+def get_gamma(x, y, theta):
+    return math.atan2(y,x) - theta + math.pi
