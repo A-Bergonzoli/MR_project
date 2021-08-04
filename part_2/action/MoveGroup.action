@@ -1,0 +1,11 @@
+# Action definition file which consists in three parts:
+# the goal, the result and the feedback
+
+# The GOAL, to be sent by the client
+geometry_msgs/Vector3 goal
+---
+# The RESULT, to be sent by the server upon completion
+string result
+---
+# The FEEDBACK, to be sent (periodically) by the server during execution
+string base_position
