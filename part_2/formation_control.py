@@ -79,7 +79,7 @@ def consensus_control_law1(q0, w0, qj, Nj, A, j):
     var_appoggio1 = 0
     i = 0
 
-    if j == 1 or j == 4: bj = 1
+    if j == 1 or j == 4: bj = 2
     else: bj = 0
 
     # compute the needed transformations:
@@ -116,7 +116,7 @@ def consensus_control_law2(q0, w0, qj, pjx, pjy, Nj, pix, piy, A, j, u1j, u1i):
     var_appoggio2 = 0
     i = 0
 
-    if j == 1 or j == 4: bj = 1
+    if j == 1 or j == 4: bj = 2
     else: bj = 0
 
     # compute the needed transformations:
